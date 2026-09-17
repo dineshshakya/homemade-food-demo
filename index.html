@@ -201,7 +201,13 @@ function go(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.go === id));
   document.querySelector('.viewport').scrollTop = 0;
+  if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
 }
+function goFromHash(){
+  const id = location.hash.slice(1);
+  if (id && document.getElementById(id)) go(id);
+}
+window.addEventListener('hashchange', goFromHash);
 document.addEventListener('click', e => {
   const g = e.target.closest('[data-go]');
   if (g) go(g.dataset.go);
@@ -407,6 +413,7 @@ function buildReview(){
     dishes.map(d => d.name + ' — $' + d.price).join('<br>') + '</p>';
 }
 
+goFromHash();
 syncCart();
 </script>
 </body>
