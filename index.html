@@ -99,6 +99,64 @@
         <button class="btn btn-primary btn-block" data-go="screen-home">Order again</button>
       </section>
 
+      <!-- CHEF SIGNUP FLOW -->
+      <section class="screen" id="screen-chef">
+        <button class="back" data-go="screen-you" aria-label="Back">←</button>
+        <h1 class="greet">Become a home chef</h1>
+        <div class="wizard-dots" id="wizard-dots"><span class="on"></span><span></span><span></span><span></span></div>
+
+        <div class="wstep on" data-wstep="0">
+          <h2 class="row-title">Your profile</h2>
+          <div class="field"><label for="c-name">Full name *</label><input id="c-name" type="text" autocomplete="name" placeholder="e.g. Mina Sharma"></div>
+          <div class="field"><label for="c-phone">Phone *</label><input id="c-phone" type="tel" autocomplete="tel" placeholder="(619) 555-0134"></div>
+          <div class="field"><label for="c-email">Email</label><input id="c-email" type="email" autocomplete="email" placeholder="you@email.com"></div>
+          <div class="field"><label for="c-zip">Kitchen zip code *</label><input id="c-zip" type="text" inputmode="numeric" placeholder="92108"></div>
+          <div class="field"><label for="c-kitchen">Kitchen name</label><input id="c-kitchen" type="text" placeholder="e.g. Mina's Momo House"></div>
+          <div class="field"><label for="c-cooks">What do you love cooking?</label><input id="c-cooks" type="text" placeholder="e.g. momos, thali"></div>
+        </div>
+
+        <div class="wstep" data-wstep="1">
+          <h2 class="row-title">MEHKO permit</h2>
+          <p class="muted sm">Only chefs with a valid San Diego County MEHKO permit can enroll.</p>
+          <div class="field"><label for="c-permit-no">Permit number *</label><input id="c-permit-no" type="text" placeholder="e.g. MEHKO-2026-XXXX"></div>
+          <div class="field"><label for="c-permit-exp">Permit expiry date *</label><input id="c-permit-exp" type="date"></div>
+          <div class="field"><label>Upload your county permit *</label>
+            <label class="upload" for="c-permit-file"><span class="upload-icon">📄</span><span id="c-permit-label">Tap to upload photo or PDF</span></label>
+            <input id="c-permit-file" type="file" accept="image/*,.pdf" hidden>
+          </div>
+        </div>
+
+        <div class="wstep" data-wstep="2">
+          <h2 class="row-title">Your menu</h2>
+          <p class="muted sm">Add at least one dish — real photos sell.</p>
+          <div id="dish-forms"></div>
+          <button class="btn btn-gold btn-block" id="add-dish" type="button">＋ Add another dish</button>
+        </div>
+
+        <div class="wstep" data-wstep="3">
+          <h2 class="row-title">Review &amp; submit</h2>
+          <div class="review" id="review-box"></div>
+          <div class="field field-check">
+            <input type="checkbox" id="c-confirm">
+            <label for="c-confirm">I confirm my San Diego County MEHKO permit is valid and this menu is mine to sell.</label>
+          </div>
+        </div>
+
+        <p class="w-error" id="w-error" role="alert" hidden></p>
+        <div class="wizard-nav">
+          <button class="btn btn-ghost" id="w-back" type="button">Back</button>
+          <button class="btn btn-primary btn-grow" id="w-next" type="button">Continue</button>
+        </div>
+        <p class="fine">Demo only — nothing is uploaded or submitted.</p>
+      </section>
+
+      <section class="screen" id="screen-chef-done">
+        <div class="done-hero"><span class="check">✓</span></div>
+        <h1 class="greet center">Application received!</h1>
+        <p class="center muted">We'll verify your MEHKO permit and notify you when your kitchen goes live.</p>
+        <button class="btn btn-primary btn-block" data-go="screen-home">Back to home</button>
+      </section>
+
       <!-- ORDERS (empty state) -->
       <section class="screen" id="screen-orders">
         <h1 class="greet">Orders</h1>
@@ -112,7 +170,7 @@
         <div class="chef-promo">
           <strong>Cook great food?</strong>
           <p>Earn from your kitchen. Only permitted MEHKO chefs can enroll.</p>
-          <button class="btn btn-gold">Become a home chef</button>
+          <button class="btn btn-gold" data-go="screen-chef" id="become-chef">Become a home chef</button>
         </div>
       </section>
     </main>
@@ -256,6 +314,99 @@ document.getElementById('track-done').addEventListener('click', () => { orderAct
 document.querySelectorAll('#stars button').forEach((b, i, all) => {
   b.addEventListener('click', () => all.forEach((x, j) => x.classList.toggle('lit', j <= i)));
 });
+// Chef signup wizard
+let wstep = 0;
+const WSTEPS = 4;
+const werr = document.getElementById('w-error');
+function wshow(n){
+  wstep = Math.max(0, Math.min(WSTEPS - 1, n));
+  werr.hidden = true;
+  document.querySelectorAll('.wstep').forEach(s => s.classList.toggle('on', +s.dataset.wstep === wstep));
+  document.querySelectorAll('#wizard-dots span').forEach((d, i) => d.classList.toggle('on', i <= wstep));
+  document.getElementById('w-back').style.visibility = wstep === 0 ? 'hidden' : 'visible';
+  document.getElementById('w-next').textContent = wstep === WSTEPS - 1 ? 'Submit application' : 'Continue';
+  if (wstep === 3) buildReview();
+  document.querySelector('.viewport').scrollTop = 0;
+}
+function wfail(msg){ werr.textContent = msg; werr.hidden = false; werr.scrollIntoView({behavior:'smooth', block:'nearest'}); }
+function wvalid(){
+  const req = {0:['c-name','c-phone','c-zip'], 1:['c-permit-no','c-permit-exp'], 2:[], 3:[]}[wstep];
+  for (const id of req){ if (!document.getElementById(id).value.trim()) return 'Please fill in all required fields.'; }
+  if (wstep === 1 && !document.getElementById('c-permit-file').files.length) return 'Please upload your county MEHKO permit.';
+  if (wstep === 2){
+    const forms = document.querySelectorAll('.dish-form');
+    if (!forms.length) return 'Please add at least one dish.';
+    for (const f of forms){
+      if (!f.querySelector('.df-name').value.trim() || !f.querySelector('.df-price').value.trim())
+        return 'Each dish needs a name and a price.';
+    }
+  }
+  if (wstep === 3 && !document.getElementById('c-confirm').checked) return 'Please confirm your permit is valid to submit.';
+  return null;
+}
+document.getElementById('w-next').addEventListener('click', () => {
+  const err = wvalid();
+  if (err){ wfail(err); return; }
+  if (wstep === WSTEPS - 1){ go('screen-chef-done'); wshow(0); }
+  else wshow(wstep + 1);
+});
+document.getElementById('w-back').addEventListener('click', () => wshow(wstep - 1));
+document.getElementById('become-chef').addEventListener('click', () => wshow(0));
+
+// Permit file picker
+const pf = document.getElementById('c-permit-file');
+pf.addEventListener('change', () => {
+  if (pf.files[0]){
+    const lbl = document.getElementById('c-permit-label');
+    lbl.textContent = pf.files[0].name;
+    lbl.parentElement.classList.add('has-file');
+  }
+});
+
+// Dynamic dish forms
+function addDishForm(){
+  const box = document.getElementById('dish-forms');
+  const div = document.createElement('div');
+  div.className = 'dish-form';
+  div.innerHTML =
+    '<button class="rm" type="button" aria-label="Remove dish">×</button>' +
+    '<img class="dish-thumb" alt="Dish photo preview">' +
+    '<div class="field"><label>Dish photo</label>' +
+    '<label class="upload"><span class="upload-icon">📸</span><span class="ul-label">Tap to upload photo</span></label>' +
+    '<input type="file" class="df-photo" accept="image/*" hidden></div>' +
+    '<div class="field"><label>Dish name *</label><input type="text" class="df-name" placeholder="e.g. Steam Momo"></div>' +
+    '<div class="field"><label>Price ($) *</label><input type="text" class="df-price" inputmode="decimal" placeholder="15"></div>' +
+    '<div class="field"><label>Description</label><input type="text" class="df-desc" placeholder="e.g. with homemade achar"></div>';
+  box.appendChild(div);
+  const file = div.querySelector('.df-photo'), up = div.querySelector('.upload');
+  up.addEventListener('click', () => file.click());
+  file.addEventListener('change', () => {
+    if (file.files[0]){
+      const img = div.querySelector('.dish-thumb');
+      img.src = URL.createObjectURL(file.files[0]);
+      img.classList.add('show');
+      up.classList.add('has-file');
+      up.querySelector('.ul-label').textContent = file.files[0].name;
+    }
+  });
+  div.querySelector('.rm').addEventListener('click', () => div.remove());
+}
+document.getElementById('add-dish').addEventListener('click', addDishForm);
+addDishForm();
+
+function buildReview(){
+  const v = id => document.getElementById(id).value.trim();
+  const dishes = [...document.querySelectorAll('.dish-form')].map(f => ({
+    name: f.querySelector('.df-name').value.trim(),
+    price: f.querySelector('.df-price').value.trim()
+  }));
+  document.getElementById('review-box').innerHTML =
+    '<h4>Profile</h4><p>' + v('c-name') + ' · ' + v('c-phone') + '<br>' + (v('c-kitchen') || '—') + ' · ' + v('c-zip') + '</p>' +
+    '<h4>MEHKO permit</h4><p>No. ' + v('c-permit-no') + ' · expires ' + v('c-permit-exp') + '<br>📄 ' + (pf.files[0] ? pf.files[0].name : '') + '</p>' +
+    '<h4>Menu (' + dishes.length + ' dish' + (dishes.length > 1 ? 'es' : '') + ')</h4><p>' +
+    dishes.map(d => d.name + ' — $' + d.price).join('<br>') + '</p>';
+}
+
 syncCart();
 </script>
 </body>
