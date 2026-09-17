@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HomeCooked — Investor Demo</title>
+<meta name="description" content="Uber-style prototype for ordering home-cooked food from neighborhood chefs. Investor demo.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="stage">
+  <div class="phone" id="phone">
+    <header class="appbar">
+      <div class="brand"><span class="brand-mark">H</span><span class="brand-name">HomeCooked</span><span class="demo-pill">Investor demo</span></div>
+      <div class="loc">📍 92108 · San Diego ▾</div>
+    </header>
+
+    <main class="viewport">
+      <!-- HOME -->
+      <section class="screen active" id="screen-home">
+        <h1 class="greet">Craving homemade?</h1>
+        <p class="greet-sub">Real dishes from permitted home chefs near you.</p>
+        <div class="search"><span aria-hidden="true">🔍</span><input type="text" placeholder="Search momos, thali, chefs…" aria-label="Search dishes"></div>
+        <div class="chips" role="tablist" aria-label="Categories">
+          <button class="chip active">All</button><button class="chip">Momo</button><button class="chip">Thali</button><button class="chip">Achar</button>
+        </div>
+        <h2 class="row-title">Near you · 92108</h2>
+        <div class="dish-list" id="dish-list"></div>
+        <div class="model-card">
+          <strong>Uber-simple model</strong>
+          <p>You order → a neighbor cooks → you eat. Chefs keep most of every order; the platform keeps a small service fee.</p>
+        </div>
+      </section>
+
+      <!-- DISH DETAIL -->
+      <section class="screen" id="screen-dish">
+        <button class="back" data-go="screen-home" aria-label="Back">←</button>
+        <img class="dish-hero" id="dish-img" src="" alt="">
+        <div class="dish-body">
+          <div class="dish-top"><h1 id="dish-name"></h1><span class="price" id="dish-price"></span></div>
+          <p class="dish-chef" id="dish-chef"></p>
+          <p class="dish-desc" id="dish-desc"></p>
+          <div class="qty-row">
+            <div class="stepper"><button id="d-minus" aria-label="Decrease quantity">−</button><span id="d-qty">1</span><button id="d-plus" aria-label="Increase quantity">+</button></div>
+            <button class="btn btn-primary btn-grow" id="dish-add">Add to cart</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CART -->
+      <section class="screen" id="screen-cart">
+        <h1 class="greet">Your order</h1>
+        <div class="seg" role="group" aria-label="Fulfillment">
+          <button class="seg-btn active" id="seg-pickup">Pickup</button>
+          <button class="seg-btn" id="seg-delivery">Delivery</button>
+        </div>
+        <div class="cart-lines" id="cart-lines"></div>
+        <div class="bill">
+          <div class="bill-row"><span>Subtotal</span><span id="bill-sub">$0.00</span></div>
+          <div class="bill-row"><span>Delivery</span><span id="bill-del">$0.00</span></div>
+          <div class="bill-row"><span>Service fee <em>(how the platform earns)</em></span><span id="bill-fee">$0.00</span></div>
+          <div class="bill-row total"><span>Total</span><span id="bill-total">$0.00</span></div>
+        </div>
+        <button class="btn btn-primary btn-block" id="place-order">Place order</button>
+        <p class="fine">Demo only — no real payment is processed.</p>
+      </section>
+
+      <!-- TRACKING -->
+      <section class="screen" id="screen-track">
+        <h1 class="greet">Your order</h1>
+        <div class="track-card">
+          <div class="pulse" aria-hidden="true"></div>
+          <p class="track-status" id="track-status">Order confirmed</p>
+          <p class="track-chef" id="track-chef"></p>
+          <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+          <ol class="tl" id="timeline">
+            <li data-step="0"><span class="dot"></span>Order confirmed</li>
+            <li data-step="1"><span class="dot"></span>Chef is cooking</li>
+            <li data-step="2"><span class="dot"></span>On its way</li>
+            <li data-step="3"><span class="dot"></span>Delivered</li>
+          </ol>
+        </div>
+        <div class="cart-lines" id="track-items"></div>
+        <button class="btn btn-primary btn-block" id="track-done" disabled>Enjoy your meal →</button>
+      </section>
+
+      <!-- DONE -->
+      <section class="screen" id="screen-done">
+        <div class="done-hero"><span class="check">✓</span></div>
+        <h1 class="greet center">Enjoy your meal!</h1>
+        <p class="center muted">How was it?</p>
+        <div class="stars" id="stars" role="radiogroup" aria-label="Rate your meal">
+          <button aria-label="1 star">★</button><button aria-label="2 stars">★</button><button aria-label="3 stars">★</button><button aria-label="4 stars">★</button><button aria-label="5 stars">★</button>
+        </div>
+        <div class="bill">
+          <div class="bill-row"><span>Chef earned</span><span id="done-chef">$0.00</span></div>
+          <div class="bill-row"><span>Platform fee</span><span id="done-fee">$0.00</span></div>
+        </div>
+        <button class="btn btn-primary btn-block" data-go="screen-home">Order again</button>
+      </section>
+
+      <!-- ORDERS (empty state) -->
+      <section class="screen" id="screen-orders">
+        <h1 class="greet">Orders</h1>
+        <div class="empty"><p>No orders yet.</p><button class="btn btn-primary" data-go="screen-home">Find food near you</button></div>
+      </section>
+
+      <!-- YOU -->
+      <section class="screen" id="screen-you">
+        <h1 class="greet">You</h1>
+        <div class="profile-card"><span class="avatar">😋</span><div><strong>Food lover</strong><p class="muted">92108 · San Diego</p></div></div>
+        <div class="chef-promo">
+          <strong>Cook great food?</strong>
+          <p>Earn from your kitchen. Only permitted MEHKO chefs can enroll.</p>
+          <button class="btn btn-gold">Become a home chef</button>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar" aria-label="Primary">
+      <button class="tab active" data-go="screen-home"><span>🏠</span>Home</button>
+      <button class="tab" id="tab-orders"><span>🧾</span>Orders</button>
+      <button class="tab" data-go="screen-you"><span>👤</span>You</button>
+      <button class="tab cart-tab" data-go="screen-cart"><span>🛒</span>Cart<i class="badge" id="cart-badge" hidden>0</i></button>
+    </nav>
+  </div>
+  <p class="stage-note">Interactive prototype for investors — every tap works, no real orders or payments.</p>
+</div>
+<script>
+const IMG = 'https://raw.githubusercontent.com/dineshshakya/dineshfood/main/images/';
+const DISHES = [
+  {id:'steam', name:'Steam Momo', chef:'Chef Mina S.', price:15, rating:'4.9', img:'steam-momo.webp', desc:'Delicate steamed dumplings served with homemade Nepali-style achar.'},
+  {id:'jhol', name:'Jhol Momo', chef:'Chef Mina S.', price:16, rating:'4.8', img:'jhol-momo.webp', desc:'Steamed momos drowned in a spiced sesame-tomato jhol.'},
+  {id:'chilli', name:'Chicken Chilli Momo', chef:'Chef Ramesh T.', price:17, rating:'4.9', img:'chilli-momo.webp', desc:'Juicy momos tossed in a fiery chilli-garlic sauce.'},
+  {id:'stirfry', name:'Stir Fry Momo', chef:'Chef Gita K.', price:16, rating:'4.7', img:'stirfry-momo.webp', desc:'Wok-tossed momos with peppers and onions.'},
+  {id:'baked', name:'Baked Momo', chef:'Chef Ramesh T.', price:17, rating:'4.8', img:'baked-momo.webp', desc:'Golden-baked — crispy outside, juicy inside.'}
+];
+const byId = id => DISHES.find(d => d.id === id);
+const money = n => '$' + n.toFixed(2);
+let cart = {}, fulfillment = 'pickup', orderActive = false, lastBill = {sub:0, fee:0};
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.go === id));
+  document.querySelector('.viewport').scrollTop = 0;
+}
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]');
+  if (g) go(g.dataset.go);
+});
+document.getElementById('tab-orders').addEventListener('click', () => go(orderActive ? 'screen-track' : 'screen-orders'));
+
+// Home dish list
+const list = document.getElementById('dish-list');
+DISHES.forEach(d => {
+  const el = document.createElement('article');
+  el.className = 'dish-card';
+  el.innerHTML = `<img src="${IMG}${d.img}" alt="${d.name}" loading="lazy">
+    <div class="dish-info"><h3>${d.name}</h3><p class="muted">${d.chef} · ★ ${d.rating}</p>
+    <div class="dish-foot"><span class="price">${money(d.price)}</span><button class="add" data-add="${d.id}">Add</button></div></div>`;
+  el.addEventListener('click', () => openDish(d.id));
+  list.appendChild(el);
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-add]');
+  if (b){ e.stopPropagation(); cart[b.dataset.add] = (cart[b.dataset.add]||0) + 1; syncCart(); }
+});
+
+// Dish detail
+let detailId = null, detailQty = 1;
+function openDish(id){
+  const d = byId(id); detailId = id; detailQty = 1;
+  document.getElementById('dish-img').src = IMG + d.img;
+  document.getElementById('dish-img').alt = d.name;
+  document.getElementById('dish-name').textContent = d.name;
+  document.getElementById('dish-price').textContent = money(d.price);
+  document.getElementById('dish-chef').textContent = d.chef + ' · ★ ' + d.rating + ' · 92108';
+  document.getElementById('dish-desc').textContent = d.desc;
+  document.getElementById('d-qty').textContent = '1';
+  go('screen-dish');
+}
+document.getElementById('d-minus').addEventListener('click', () => { detailQty = Math.max(1, detailQty-1); document.getElementById('d-qty').textContent = detailQty; });
+document.getElementById('d-plus').addEventListener('click', () => { detailQty++; document.getElementById('d-qty').textContent = detailQty; });
+document.getElementById('dish-add').addEventListener('click', () => { cart[detailId] = (cart[detailId]||0) + detailQty; syncCart(); go('screen-cart'); });
+
+// Fulfillment toggle
+const segP = document.getElementById('seg-pickup'), segD = document.getElementById('seg-delivery');
+segP.addEventListener('click', () => { fulfillment='pickup'; segP.classList.add('active'); segD.classList.remove('active'); renderCart(); });
+segD.addEventListener('click', () => { fulfillment='delivery'; segD.classList.add('active'); segP.classList.remove('active'); renderCart(); });
+
+function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
+function syncCart(){
+  const n = cartCount(), badge = document.getElementById('cart-badge');
+  badge.hidden = n === 0; badge.textContent = n;
+  renderCart();
+}
+function renderCart(){
+  const box = document.getElementById('cart-lines'); box.innerHTML = '';
+  let sub = 0;
+  Object.entries(cart).forEach(([id, qty]) => {
+    const d = byId(id); sub += d.price * qty;
+    const row = document.createElement('div');
+    row.className = 'cart-row';
+    row.innerHTML = `<img src="${IMG}${d.img}" alt="${d.name}"><div class="cr-info"><strong>${d.name}</strong><p class="muted">${money(d.price)} each</p></div>
+      <div class="stepper sm"><button data-dec="${id}">−</button><span>${qty}</span><button data-inc="${id}">+</button></div>`;
+    box.appendChild(row);
+  });
+  if (!Object.keys(cart).length) box.innerHTML = '<p class="muted">Your cart is empty.</p>';
+  const del = fulfillment === 'delivery' && sub > 0 ? 2.99 : 0;
+  const fee = sub * 0.10;
+  lastBill = {sub, fee};
+  document.getElementById('bill-sub').textContent = money(sub);
+  document.getElementById('bill-del').textContent = money(del);
+  document.getElementById('bill-fee').textContent = money(fee);
+  document.getElementById('bill-total').textContent = money(sub + del + fee);
+  document.getElementById('place-order').disabled = sub === 0;
+}
+document.addEventListener('click', e => {
+  const inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]');
+  if (inc){ cart[inc.dataset.inc]++; syncCart(); }
+  if (dec){ const id = dec.dataset.dec; cart[id]--; if (cart[id] <= 0) delete cart[id]; syncCart(); }
+});
+
+// Tracking simulation (Uber-style)
+const STEPS = ['Order confirmed', 'Chef is cooking 🔥', 'On its way 🛵', 'Delivered ✓'];
+let timers = [];
+document.getElementById('place-order').addEventListener('click', () => {
+  orderActive = true;
+  const first = byId(Object.keys(cart)[0]);
+  document.getElementById('track-chef').textContent = first.chef + ' · 92108';
+  const items = document.getElementById('track-items'); items.innerHTML = '';
+  Object.entries(cart).forEach(([id, qty]) => {
+    const d = byId(id);
+    items.innerHTML += `<div class="cart-row"><img src="${IMG}${d.img}" alt="${d.name}"><div class="cr-info"><strong>${d.name} × ${qty}</strong></div><span class="price">${money(d.price*qty)}</span></div>`;
+  });
+  document.getElementById('done-chef').textContent = money(lastBill.sub - lastBill.fee);
+  document.getElementById('done-fee').textContent = money(lastBill.fee);
+  cart = {}; syncCart();
+  go('screen-track');
+  timers.forEach(clearTimeout); timers = [];
+  const lis = document.querySelectorAll('#timeline li');
+  lis.forEach(li => li.classList.remove('on'));
+  const btn = document.getElementById('track-done'); btn.disabled = true;
+  STEPS.forEach((label, i) => {
+    timers.push(setTimeout(() => {
+      document.getElementById('track-status').textContent = label;
+      lis.forEach((li, j) => li.classList.toggle('on', j <= i));
+      document.getElementById('progress-fill').style.width = ((i+1)/STEPS.length*100) + '%';
+      if (i === STEPS.length - 1) btn.disabled = false;
+    }, 1200 + i * 3200));
+  });
+});
+document.getElementById('track-done').addEventListener('click', () => { orderActive = false; go('screen-done'); });
+
+// Stars
+document.querySelectorAll('#stars button').forEach((b, i, all) => {
+  b.addEventListener('click', () => all.forEach((x, j) => x.classList.toggle('lit', j <= i)));
+});
+syncCart();
+</script>
+</body>
+</html>
