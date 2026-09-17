@@ -164,3 +164,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Ar
 .field-check{display:flex;gap:.6rem;align-items:flex-start;margin-top:12px;}
 .field-check input{width:1.15rem;height:1.15rem;margin-top:.15rem;flex:none;accent-color:var(--sky-deep);}
 .field-check label{font-size:.88rem;color:var(--ink);font-weight:400;}
+
+/* Permit hub: have vs need */
+.permit-choice{display:flex;gap:10px;margin:2px 0 14px;}
+.choice-card{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:var(--radius);padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;text-align:center;font-family:inherit;}
+.choice-card[aria-pressed="true"]{border-color:var(--sky-deep);background:var(--wash);box-shadow:0 0 0 2px rgba(47,143,214,.25);}
+.choice-emoji{font-size:1.6rem;}
+.choice-card strong{color:var(--navy);font-size:.92rem;}
+.choice-card .muted{font-size:.78rem;}
+
+/* SOP assistant */
+.sop-intro{background:var(--wash);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:4px;}
+.sop-intro strong{color:var(--navy);font-size:.92rem;}
+.sop-intro p{margin:6px 0 0;}
+.sop-h{font-size:.95rem;color:var(--navy);margin:20px 0 10px;padding-top:14px;border-top:1px solid var(--line);}
+.prefill-note{background:#eefbf1;border:1px solid #bfe8c9;color:#166534;border-radius:12px;padding:10px 12px;font-size:.85rem;margin:0 0 12px;line-height:1.5;}
+.packet-box{background:var(--navy);color:#fff;border-radius:var(--radius);padding:16px;margin-top:18px;}
+.packet-box p{color:#bcd7ee;font-size:.88rem;line-height:1.6;margin:8px 0 0;}
+.packet-box .muted{color:#8fa9c4;font-size:.8rem;}
+.day-pick{display:flex;gap:6px;}
+.day-pick button{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 0;font-weight:700;color:var(--muted);font-size:.85rem;font-family:inherit;}
+.day-pick button.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+.permit-tracker{list-style:none;margin:14px 0;padding:0;display:flex;flex-direction:column;gap:10px;text-align:left;}
+.permit-tracker li{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.92rem;}
+.permit-tracker .dot{width:14px;height:14px;border-radius:50%;background:var(--line);flex:none;}
+.permit-tracker li.on{color:var(--navy);font-weight:700;}
+.permit-tracker li.on .dot{background:#22c55e;}
