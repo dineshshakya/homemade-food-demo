@@ -117,12 +117,85 @@
 
         <div class="wstep" data-wstep="1">
           <h2 class="row-title">MEHKO permit</h2>
-          <p class="muted sm">Only chefs with a valid San Diego County MEHKO permit can enroll.</p>
+          <p class="muted sm">Only chefs with a valid San Diego County MEHKO permit can go live — but you can build your menu while your application is in progress.</p>
+          <div class="permit-choice" role="group" aria-label="Permit status">
+            <button type="button" class="choice-card" id="choice-have" aria-pressed="false">
+              <span class="choice-emoji">✅</span>
+              <strong>I have my permit</strong>
+              <span class="muted sm">Enter your permit details</span>
+            </button>
+            <button type="button" class="choice-card" id="choice-need" aria-pressed="false">
+              <span class="choice-emoji">📝</span>
+              <strong>I need one</strong>
+              <span class="muted sm">Free guided county application</span>
+            </button>
+          </div>
+
+          <div id="permit-have" hidden>
           <div class="field"><label for="c-permit-no">Permit number *</label><input id="c-permit-no" type="text" placeholder="e.g. MEHKO-2026-XXXX"></div>
           <div class="field"><label for="c-permit-exp">Permit expiry date *</label><input id="c-permit-exp" type="date"></div>
           <div class="field"><label>Upload your county permit *</label>
             <label class="upload" for="c-permit-file"><span class="upload-icon">📄</span><span id="c-permit-label">Tap to upload photo or PDF</span></label>
             <input id="c-permit-file" type="file" accept="image/*,.pdf" hidden>
+          </div>
+          </div>
+
+          <div id="permit-need" hidden>
+            <div class="sop-intro">
+              <strong>📋 County application assistant</strong>
+              <p class="muted sm">Answer in plain language — we fill in the county's SOP form for you. Your menu (next step) attaches automatically.</p>
+            </div>
+
+            <h3 class="sop-h">Kitchen details</h3>
+            <div class="field"><label for="s-dba">Business name (DBA)</label><input id="s-dba" type="text" placeholder="e.g. Mina's Momo House"></div>
+            <div class="field"><label for="s-addr">Kitchen street address *</label><input id="s-addr" type="text" autocomplete="street-address" placeholder="Street address"></div>
+            <div class="field"><label>Do you rent your home?</label>
+              <div class="seg" role="group" aria-label="Rent or own">
+                <button type="button" class="seg-btn" id="rent-no">Own</button>
+                <button type="button" class="seg-btn" id="rent-yes">Rent</button>
+              </div>
+            </div>
+            <div class="field" id="landlord-wrap" hidden><label>Landlord permission letter *</label>
+              <label class="upload" for="s-landlord"><span class="upload-icon">📄</span><span id="s-landlord-label">Tap to upload photo or PDF</span></label>
+              <input id="s-landlord" type="file" accept="image/*,.pdf" hidden>
+              <p class="muted sm" style="margin:6px 0 0">Renters must include written landlord approval — a top reason applications get rejected.</p>
+            </div>
+            <div class="field"><label for="s-helper">Helper's name (optional)</label><input id="s-helper" type="text" placeholder="Anyone paid to help cook, pack, or deliver"></div>
+            <div class="field"><label for="s-helper-hrs">Helper hours per week (optional)</label><input id="s-helper-hrs" type="text" inputmode="numeric" placeholder="e.g. 10"></div>
+
+            <h3 class="sop-h">Cooking schedule</h3>
+            <div class="field"><label>Which days will you cook? *</label>
+              <div class="day-pick" id="day-pick" role="group" aria-label="Cooking days">
+                <button type="button" data-day="Sun">S</button><button type="button" data-day="Mon">M</button><button type="button" data-day="Tue">T</button><button type="button" data-day="Wed">W</button><button type="button" data-day="Thu">T</button><button type="button" data-day="Fri">F</button><button type="button" data-day="Sat">S</button>
+              </div>
+            </div>
+            <div class="field"><label for="s-cook-hours">Cooking hours *</label><input id="s-cook-hours" type="text" placeholder="e.g. 10am – 7pm"></div>
+            <div class="field"><label for="s-meals">Meals per day *</label><input id="s-meals" type="text" inputmode="numeric" placeholder="e.g. 20"></div>
+            <p class="muted sm">County caps: 30 meals/day and 90/week — everything cooked and served the same day.</p>
+            <div class="prefill-note">✓ <strong>Meal tracking:</strong> handled automatically by your dineshfood order dashboard.</div>
+
+            <h3 class="sop-h">How customers find you</h3>
+            <div class="prefill-note">✓ <strong>Internet Food Service Intermediary:</strong> dineshfood — pre-filled on your county form.</div>
+            <div class="field"><label for="s-other-ads">Other advertising (optional)</label><input id="s-other-ads" type="text" placeholder="e.g. Instagram @minasmomos"></div>
+
+            <h3 class="sop-h">Documents</h3>
+            <div class="field"><label>Food Safety Manager certificate *</label>
+              <label class="upload" for="s-fsm"><span class="upload-icon">🎓</span><span id="s-fsm-label">Tap to upload photo or PDF</span></label>
+              <input id="s-fsm" type="file" accept="image/*,.pdf" hidden>
+              <p class="muted sm" style="margin:6px 0 0">Don't have one yet? It's about 8 hours online — start now, it runs alongside county review.</p>
+            </div>
+            <div class="field"><label>Government ID *</label>
+              <label class="upload" for="s-id"><span class="upload-icon">🪪</span><span id="s-id-label">Tap to upload photo</span></label>
+              <input id="s-id" type="file" accept="image/*,.pdf" hidden>
+            </div>
+            <div class="prefill-note">✓ <strong>Proposed menu:</strong> attached automatically from the menu you build next.</div>
+
+            <div class="packet-box">
+              <strong>📦 Your county packet is ready</strong>
+              <p>Submit it to San Diego County DEHQ with the Health Permit Application + <strong>$588</strong> fee.<br>
+              📧 FHDMEHKO@sdcounty.ca.gov · 📞 (858) 505-6900</p>
+              <p class="muted sm">County review takes a few weeks — keep building your menu meanwhile. Your kitchen goes live the moment your permit is approved.</p>
+            </div>
           </div>
         </div>
 
@@ -138,7 +211,7 @@
           <div class="review" id="review-box"></div>
           <div class="field field-check">
             <input type="checkbox" id="c-confirm">
-            <label for="c-confirm">I confirm my San Diego County MEHKO permit is valid and this menu is mine to sell.</label>
+            <label for="c-confirm" id="c-confirm-label">I confirm my San Diego County MEHKO permit is valid and this menu is mine to sell.</label>
           </div>
         </div>
 
@@ -151,9 +224,23 @@
       </section>
 
       <section class="screen" id="screen-chef-done">
-        <div class="done-hero"><span class="check">✓</span></div>
-        <h1 class="greet center">Application received!</h1>
-        <p class="center muted">We'll verify your MEHKO permit and notify you when your kitchen goes live.</p>
+        <div id="done-have">
+          <div class="done-hero"><span class="check">✓</span></div>
+          <h1 class="greet center">Application received!</h1>
+          <p class="center muted">We'll verify your MEHKO permit and notify you when your kitchen goes live.</p>
+        </div>
+        <div id="done-need" hidden>
+          <div class="done-hero"><span class="check">📦</span></div>
+          <h1 class="greet center">Packet ready!</h1>
+          <p class="center muted">Submit your packet to the county, then track your progress here.</p>
+          <ol class="tl permit-tracker">
+            <li class="on"><span class="dot"></span>Submit packet to DEHQ ($588)</li>
+            <li><span class="dot"></span>County review</li>
+            <li><span class="dot"></span>Inspection</li>
+            <li><span class="dot"></span>Kitchen goes live 🎉</li>
+          </ol>
+          <p class="center muted sm">Your menu is saved — it attaches to your county packet automatically.</p>
+        </div>
         <button class="btn btn-primary btn-block" data-go="screen-home">Back to home</button>
       </section>
 
@@ -169,7 +256,7 @@
         <div class="profile-card"><span class="avatar">😋</span><div><strong>Food lover</strong><p class="muted">92108 · San Diego</p></div></div>
         <div class="chef-promo">
           <strong>Cook great food?</strong>
-          <p>Earn from your kitchen. Only permitted MEHKO chefs can enroll.</p>
+          <p>Earn from your kitchen — we'll even help you get your MEHKO permit.</p>
           <button class="btn btn-gold" data-go="screen-chef" id="become-chef">Become a home chef</button>
         </div>
       </section>
@@ -320,6 +407,62 @@ document.getElementById('track-done').addEventListener('click', () => { orderAct
 document.querySelectorAll('#stars button').forEach((b, i, all) => {
   b.addEventListener('click', () => all.forEach((x, j) => x.classList.toggle('lit', j <= i)));
 });
+// Permit path branching ("have" vs "need")
+let permitPath = null, renting = false;
+const choiceHave = document.getElementById('choice-have');
+const choiceNeed = document.getElementById('choice-need');
+function setPermitPath(p){
+  permitPath = p;
+  choiceHave.setAttribute('aria-pressed', p === 'have');
+  choiceNeed.setAttribute('aria-pressed', p === 'need');
+  document.getElementById('permit-have').hidden = p !== 'have';
+  document.getElementById('permit-need').hidden = p !== 'need';
+  if (p === 'need'){
+    const k = document.getElementById('c-kitchen').value.trim();
+    const dba = document.getElementById('s-dba');
+    if (k && !dba.value.trim()) dba.value = k;
+  }
+  werr.hidden = true;
+}
+choiceHave.addEventListener('click', () => setPermitPath('have'));
+choiceNeed.addEventListener('click', () => setPermitPath('need'));
+
+// Rent / own toggle
+const rentNo = document.getElementById('rent-no'), rentYes = document.getElementById('rent-yes');
+function setRenting(r){
+  renting = r;
+  rentNo.classList.toggle('active', !r);
+  rentYes.classList.toggle('active', r);
+  document.getElementById('landlord-wrap').hidden = !r;
+}
+rentNo.addEventListener('click', () => setRenting(false));
+rentYes.addEventListener('click', () => setRenting(true));
+
+// Day picker
+document.getElementById('day-pick').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (b) b.classList.toggle('on');
+});
+function pickedDays(){
+  return [...document.querySelectorAll('#day-pick button.on')].map(b => b.dataset.day);
+}
+
+// Generic file-upload label wiring
+function wireUpload(inputId, labelId){
+  const inp = document.getElementById(inputId);
+  inp.addEventListener('change', () => {
+    if (inp.files[0]){
+      const lbl = document.getElementById(labelId);
+      lbl.textContent = inp.files[0].name;
+      lbl.parentElement.classList.add('has-file');
+    }
+  });
+}
+wireUpload('c-permit-file', 'c-permit-label');
+wireUpload('s-landlord', 's-landlord-label');
+wireUpload('s-fsm', 's-fsm-label');
+wireUpload('s-id', 's-id-label');
+
 // Chef signup wizard
 let wstep = 0;
 const WSTEPS = 4;
@@ -331,14 +474,34 @@ function wshow(n){
   document.querySelectorAll('#wizard-dots span').forEach((d, i) => d.classList.toggle('on', i <= wstep));
   document.getElementById('w-back').style.visibility = wstep === 0 ? 'hidden' : 'visible';
   document.getElementById('w-next').textContent = wstep === WSTEPS - 1 ? 'Submit application' : 'Continue';
-  if (wstep === 3) buildReview();
+  if (wstep === 3){
+    document.getElementById('c-confirm-label').textContent = permitPath === 'need'
+      ? 'I understand my kitchen goes live after San Diego County approves my MEHKO permit, and this menu is mine to sell.'
+      : 'I confirm my San Diego County MEHKO permit is valid and this menu is mine to sell.';
+    buildReview();
+  }
   document.querySelector('.viewport').scrollTop = 0;
 }
 function wfail(msg){ werr.textContent = msg; werr.hidden = false; werr.scrollIntoView({behavior:'smooth', block:'nearest'}); }
 function wvalid(){
-  const req = {0:['c-name','c-phone','c-zip'], 1:['c-permit-no','c-permit-exp'], 2:[], 3:[]}[wstep];
+  const req = {0:['c-name','c-phone','c-zip'], 2:[], 3:[]}[wstep] || [];
   for (const id of req){ if (!document.getElementById(id).value.trim()) return 'Please fill in all required fields.'; }
-  if (wstep === 1 && !document.getElementById('c-permit-file').files.length) return 'Please upload your county MEHKO permit.';
+  if (wstep === 1){
+    if (!permitPath) return 'Please choose one option above.';
+    if (permitPath === 'have'){
+      if (!document.getElementById('c-permit-no').value.trim() || !document.getElementById('c-permit-exp').value.trim())
+        return 'Please fill in all required fields.';
+      if (!document.getElementById('c-permit-file').files.length) return 'Please upload your county MEHKO permit.';
+    } else {
+      if (!document.getElementById('s-addr').value.trim()) return 'Please enter your kitchen street address.';
+      if (!pickedDays().length) return 'Please pick at least one cooking day.';
+      if (!document.getElementById('s-cook-hours').value.trim()) return 'Please enter your cooking hours.';
+      if (!document.getElementById('s-meals').value.trim()) return 'Please enter your meals per day.';
+      if (!document.getElementById('s-fsm').files.length) return 'Please upload your Food Safety Manager certificate.';
+      if (!document.getElementById('s-id').files.length) return 'Please upload your government ID.';
+      if (renting && !document.getElementById('s-landlord').files.length) return 'Please upload your landlord permission letter.';
+    }
+  }
   if (wstep === 2){
     const forms = document.querySelectorAll('.dish-form');
     if (!forms.length) return 'Please add at least one dish.';
@@ -353,21 +516,17 @@ function wvalid(){
 document.getElementById('w-next').addEventListener('click', () => {
   const err = wvalid();
   if (err){ wfail(err); return; }
-  if (wstep === WSTEPS - 1){ go('screen-chef-done'); wshow(0); }
+  if (wstep === WSTEPS - 1){
+    document.getElementById('done-have').hidden = permitPath !== 'have';
+    document.getElementById('done-need').hidden = permitPath !== 'need';
+    go('screen-chef-done'); wshow(0);
+  }
   else wshow(wstep + 1);
 });
 document.getElementById('w-back').addEventListener('click', () => wshow(wstep - 1));
 document.getElementById('become-chef').addEventListener('click', () => wshow(0));
 
-// Permit file picker
-const pf = document.getElementById('c-permit-file');
-pf.addEventListener('change', () => {
-  if (pf.files[0]){
-    const lbl = document.getElementById('c-permit-label');
-    lbl.textContent = pf.files[0].name;
-    lbl.parentElement.classList.add('has-file');
-  }
-});
+// (file uploads wired via wireUpload above)
 
 // Dynamic dish forms
 function addDishForm(){
@@ -406,9 +565,21 @@ function buildReview(){
     name: f.querySelector('.df-name').value.trim(),
     price: f.querySelector('.df-price').value.trim()
   }));
+  let permitHtml;
+  if (permitPath === 'have'){
+    const pf = document.getElementById('c-permit-file');
+    permitHtml = '<h4>MEHKO permit</h4><p>No. ' + v('c-permit-no') + ' · expires ' + v('c-permit-exp') + '<br>📄 ' + (pf.files[0] ? pf.files[0].name : '') + '</p>';
+  } else {
+    const days = pickedDays().join(', ');
+    permitHtml = '<h4>MEHKO permit</h4><p>📋 County application in progress — packet prepared in this app<br>' +
+      (v('s-dba') ? v('s-dba') + '<br>' : '') + v('s-addr') + ' · ' + v('c-zip') + '<br>' +
+      'Cooks: ' + days + ' · ' + v('s-cook-hours') + ' · ' + v('s-meals') + ' meals/day<br>' +
+      'Advertised via: dineshfood (Internet Food Service Intermediary)' +
+      (v('s-helper') ? '<br>Helper: ' + v('s-helper') + (v('s-helper-hrs') ? ' · ' + v('s-helper-hrs') + ' hrs/wk' : '') : '') + '</p>';
+  }
   document.getElementById('review-box').innerHTML =
     '<h4>Profile</h4><p>' + v('c-name') + ' · ' + v('c-phone') + '<br>' + (v('c-kitchen') || '—') + ' · ' + v('c-zip') + '</p>' +
-    '<h4>MEHKO permit</h4><p>No. ' + v('c-permit-no') + ' · expires ' + v('c-permit-exp') + '<br>📄 ' + (pf.files[0] ? pf.files[0].name : '') + '</p>' +
+    permitHtml +
     '<h4>Menu (' + dishes.length + ' dish' + (dishes.length > 1 ? 'es' : '') + ')</h4><p>' +
     dishes.map(d => d.name + ' — $' + d.price).join('<br>') + '</p>';
 }
